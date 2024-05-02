@@ -382,5 +382,105 @@ short_rate_path = ho_lee_model(theta, sigma, r0, T, dt)
 print(short_rate_path[:10])
 
 # hull-white model for short term rate 
+import numpy as np
+
+def hull_white_one_factor(alpha, sigma, theta, r0, T, dt):
+    """
+    Simulate the short rate using the Hull-White one-factor model.
+
+    Parameters:
+    alpha (float): The mean reversion speed.
+    sigma (float): The volatility of the short rate.
+    theta (function): A function that returns the time-dependent drift term.
+    r0 (float): The initial short rate.
+    T (float): The total time horizon for the simulation.
+    dt (float): The time step for the simulation.
+
+    Returns:
+    np.array: A numpy array containing the simulated short rate path.
+    """
+    num_steps = int(T / dt)
+    rates = np.zeros(num_steps)
+    rates[0] = r0
+    
+    for t in range(1, num_steps):
+        t_i = t * dt
+        dW = np.random.normal(0, np.sqrt(dt))
+        rates[t] = rates[t-1] + (theta(t_i) - alpha * rates[t-1]) * dt + sigma * dW
+    
+    return rates
+
+# Example usage:
+# Define the theta function
+def theta(t):
+    # This is a placeholder for the actual theta function.
+    # In practice, theta(t) would be calibrated from market data.
+    return 0.01
+
+# Model parameters
+alpha = 0.1  # Mean reversion speed
+sigma = 0.01  # Volatility of the short rate
+r0 = 0.05  # Initial short rate
+T = 1.0  # Total time horizon (1 year)
+dt = 1/252  # Daily time step
+
+# Simulate the short rate
+short_rate_path = hull_white_one_factor(alpha, sigma, theta, r0, T, dt)
+
+# Print the first 10 simulated rates
+print(short_rate_path[:10])
+
+# hull white model of short term rates
+
+import numpy as np
+
+def hull_white_one_factor(alpha, sigma, theta, r0, T, dt):
+    """
+    Simulate the short rate using the Hull-White one-factor model.
+
+    Parameters:
+    alpha (float): The mean reversion speed.
+    sigma (float): The volatility of the short rate.
+    theta (function): A function that returns the time-dependent drift term.
+    r0 (float): The initial short rate.
+    T (float): The total time horizon for the simulation.
+    dt (float): The time step for the simulation.
+
+    Returns:
+    np.array: A numpy array containing the simulated short rate path.
+    """
+    num_steps = int(T / dt)
+    rates = np.zeros(num_steps)
+    rates[0] = r0
+    
+    for t in range(1, num_steps):
+        t_i = t * dt
+        dW = np.random.normal(0, np.sqrt(dt))
+        rates[t] = rates[t-1] + (theta(t_i) - alpha * rates[t-1]) * dt + sigma * dW
+    
+    return rates
+
+# Example usage:
+# Define the theta function
+def theta(t):
+    # This is a placeholder for the actual theta function.
+    # In practice, theta(t) would be calibrated from market data.
+    return 0.01
+
+# Model parameters
+alpha = 0.1  # Mean reversion speed
+sigma = 0.01  # Volatility of the short rate
+r0 = 0.05  # Initial short rate
+T = 1.0  # Total time horizon (1 year)
+dt = 1/252  # Daily time step
+
+# Simulate the short rate
+short_rate_path = hull_white_one_factor(alpha, sigma, theta, r0, T, dt)
+
+# Print the first 10 simulated rates
+print(short_rate_path[:10])
+
+# vasicek model of short term rate
+
 
 
