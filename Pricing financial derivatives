@@ -23,4 +23,37 @@ leverage_factor = 5  # Leverage of 5 times
 leveraged_cfd_price = calculate_leveraged_cfd_price(current_asset_price, contract_asset_price, number_of_shares, leverage_factor)
 print(f"The price of the leveraged CFD contract is: {leveraged_cfd_price}")
 
-#
+# Capital required to hold a single stock futures contracts 
+
+import math
+
+def calculate_ssf_price(spot_price, dividends, risk_free_rate, time_to_expiration, leverage):
+    """
+    Calculate the price of a single stock futures contract with leverage.
+    
+    Parameters:
+    spot_price (float): The current price of the stock.
+    dividends (float): The expected dividends during the period until expiration.
+    risk_free_rate (float): The annualized risk-free interest rate.
+    time_to_expiration (float): The time to expiration in years.
+    leverage (int): The leverage factor.
+
+    Returns:
+    float: The price of the SSF contract.
+    """
+    ssf_price = (spot_price - dividends) * math.pow((1 + risk_free_rate), time_to_expiration)
+    capital_required = ssf_price / leverage
+    return capital_required
+
+# Example usage:
+spot_price = 100.00  # Current price of the stock
+dividends = 2.00  # Expected dividends
+risk_free_rate = 0.05  # Risk-free interest rate (5% per annum)
+time_to_expiration = 0.5  # Time to expiration in years (6 months)
+leverage = 5  # Leverage of 5 times
+
+ssf_price = calculate_ssf_price(spot_price, dividends, risk_free_rate, time_to_expiration, leverage)
+print(f"The capital required to hold the leveraged SSF position is: {ssf_price}")
+
+# Pricing warrants contracts 
+
