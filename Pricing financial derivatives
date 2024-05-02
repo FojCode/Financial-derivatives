@@ -1,4 +1,4 @@
-# Pricing a contract for difference contract (cfd)
+scipy.stats# Pricing a contract for difference contract (cfd)
 def calculate_leveraged_cfd_price(current_price, contract_price, shares, leverage):
     """
     Calculate the price of a leveraged CFD contract.
@@ -646,4 +646,49 @@ option_value = V[0, int(N/2)]
 print(f"The option value is: {option_value}")
 
 # garman kohlhagen prices of call and put options 
+
+import numpy as np
+from scipy.stats import norm
+
+def garman_kohlhagen_call_put(S, K, T, r_dom, r_for, sigma):
+    """
+    Calculate European call and put option prices using the Garman-Kohlhagen model.
+
+    Parameters:
+    S (float): Spot price of the underlying asset.
+    K (float): Strike price of the option.
+    T (float): Time to maturity (in years).
+    r_dom (float): Domestic risk-free interest rate (annual).
+    r_for (float): Foreign risk-free interest rate (annual).
+    sigma (float): Volatility of the underlying asset (annual).
+
+    Returns:
+    float: Price of the European call option.
+    float: Price of the European put option.
+    """
+    # Calculate d1 and d2
+    d1 = (np.log(S / K) + (r_dom - r_for + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+    d2 = d1 - sigma * np.sqrt(T)
+    
+    # Calculate call and put prices
+    call_price = S * np.exp(-r_for * T) * norm.cdf(d1) - K * np.exp(-r_dom * T) * norm.cdf(d2)
+    put_price = K * np.exp(-r_dom * T) * norm.cdf(-d2) - S * np.exp(-r_for * T) * norm.cdf(-d1)
+    
+    return call_price, put_price
+
+# Example parameters
+S = 1.30      # Spot exchange rate, e.g., EUR/USD
+K = 1.35      # Strike exchange rate
+T = 1         # Time to maturity in years
+r_dom = 0.02  # Domestic risk-free interest rate (e.g., USD)
+r_for = 0.01  # Foreign risk-free interest rate (e.g., EUR)
+sigma = 0.10  # Volatility
+
+# Calculate call and put option prices
+call_price, put_price = garman_kohlhagen_call_put(S, K, T, r_dom, r_for, sigma)
+
+print(f"European Call Option Price: {call_price}")
+print(f"European Put Option Price: {put_price}")
+
+# put call parity
 
