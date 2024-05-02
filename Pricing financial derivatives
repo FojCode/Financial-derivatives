@@ -1,0 +1,26 @@
+# Pricing a contract for difference contract (cfd)
+def calculate_leveraged_cfd_price(current_price, contract_price, shares, leverage):
+    """
+    Calculate the price of a leveraged CFD contract.
+    
+    Parameters:
+    current_price (float): The current price of the underlying asset.
+    contract_price (float): The price of the asset at the time of the contract.
+    shares (int): The number of shares in the contract.
+    leverage (int): The leverage factor.
+
+    Returns:
+    float: The price of the leveraged CFD contract.
+    """
+    return (current_price - contract_price) * shares * leverage
+
+# Example usage:
+current_asset_price = 150.00  # Current price of the asset
+contract_asset_price = 100.00  # Price of the asset at the time of the contract
+number_of_shares = 10  # Number of shares in the contract
+leverage_factor = 5  # Leverage of 5 times
+
+leveraged_cfd_price = calculate_leveraged_cfd_price(current_asset_price, contract_asset_price, number_of_shares, leverage_factor)
+print(f"The price of the leveraged CFD contract is: {leveraged_cfd_price}")
+
+#
