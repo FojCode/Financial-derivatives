@@ -190,5 +190,45 @@ print(f"Risk-neutral probability of a down move: {p_down}")
 
 # stochastic equation for a standard Brownian motion 
 
+import numpy as np
+
+def generalized_wiener_process(mu, sigma, dt, steps):
+    """
+    Simulate a generalized Wiener process.
+    
+    Parameters:
+    mu (float): Drift coefficient.
+    sigma (float): Volatility coefficient.
+    dt (float): Time increment.
+    steps (int): Number of steps to simulate.
+
+    Returns:
+    np.array: Simulated values of the process.
+    """
+    # Initialize the array for the Wiener process
+    W = np.zeros(steps+1)
+    
+    # Generate the increments of a standard Wiener process
+    dW = np.random.normal(loc=0.0, scale=np.sqrt(dt), size=steps)
+    
+    # Calculate the generalized Wiener process
+    W[1:] = np.cumsum(mu*dt + sigma*dW)
+    
+    return W
+
+# Example usage:
+mu = 0.05  # Drift coefficient
+sigma = 0.2  # Volatility coefficient
+dt = 0.01  # Time increment
+steps = 1000  # Number of steps
+
+# Generate the process
+process = generalized_wiener_process(mu, sigma, dt, steps)
+
+# Print the first 10 values
+print(process[:10])
+
+# Ito process
+
 
 
