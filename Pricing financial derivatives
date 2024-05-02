@@ -525,4 +525,46 @@ print(interest_rate_path[:10])
 
 # Cox Ingersoll Ross model of short rate 
 
+import numpy as np
 
+def cir_model(r0, k, theta, sigma, T, dt):
+    """
+    Simulate the short rate using the Cox-Ingersoll-Ross model.
+
+    Parameters:
+    r0 (float): The initial short rate.
+    k (float): The mean reversion speed.
+    theta (float): The long-term mean level.
+    sigma (float): The volatility of the short rate.
+    T (float): The total time horizon for the simulation.
+    dt (float): The time step for the simulation.
+
+    Returns:
+    np.array: A numpy array containing the simulated short rate path.
+    """
+    num_steps = int(T / dt)
+    rates = np.zeros(num_steps)
+    rates[0] = r0
+    
+    for t in range(1, num_steps):
+        dW = np.random.normal(0, np.sqrt(dt))
+        dr = k * (theta - rates[t-1]) * dt + sigma * np.sqrt(rates[t-1]) * dW
+        rates[t] = max(rates[t-1] + dr, 0)  # Ensure the rate stays non-negative
+    
+    return rates
+
+# Example usage:
+r0 = 0.05  # Initial short rate
+k = 0.3    # Mean reversion speed
+theta = 0.04  # Long-term mean level
+sigma = 0.02  # Volatility
+T = 1.0    # Total time horizon (1 year)
+dt = 1/252  # Daily time step
+
+# Simulate the short rate
+short_rate_path = cir_model(r0, k, theta, sigma, T, dt)
+
+# Print the first 10 simulated rates
+print(short_rate_path[:10])
+
+# geometric Brownian motion model for a stock price
