@@ -335,5 +335,52 @@ print(f"The change in g according to Ito's Lemma is: {change_in_g}")
 
 # Ho-lee model for short rate
 
+import numpy as np
+
+def ho_lee_model(theta, sigma, r0, T, dt):
+    """
+    Simulate the short rate using the Ho-Lee model.
+
+    Parameters:
+    theta (function): A function of time t that returns the value of theta at t.
+    sigma (float): The volatility of the short rate.
+    r0 (float): The initial short rate.
+    T (float): The total time horizon for the simulation.
+    dt (float): The time step for the simulation.
+
+    Returns:
+    np.array: A numpy array containing the simulated short rate path.
+    """
+    num_steps = int(T / dt)
+    rates = np.zeros(num_steps)
+    rates[0] = r0
+    
+    for t in range(1, num_steps):
+        t_i = t * dt
+        dW = np.random.normal(0, np.sqrt(dt))
+        rates[t] = rates[t-1] + theta(t_i) * dt + sigma * dW
+    
+    return rates
+
+# Example usage:
+# Define the theta function
+def theta(t):
+    # This is a placeholder for the actual theta function.
+    # In practice, theta(t) would be calibrated from market data.
+    return 0.01
+
+# Model parameters
+sigma = 0.02  # Volatility of the short rate
+r0 = 0.05  # Initial short rate
+T = 1.0  # Total time horizon (1 year)
+dt = 1/252  # Daily time step
+
+# Simulate the short rate
+short_rate_path = ho_lee_model(theta, sigma, r0, T, dt)
+
+# Print the first 10 simulated rates
+print(short_rate_path[:10])
+
+# hull-white model for short term rate 
 
 
