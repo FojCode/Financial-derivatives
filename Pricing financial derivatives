@@ -149,9 +149,46 @@ share_dilution_factor = 0.01  # Share dilution factor (1%)
 leverage_factor = 5  # Leverage of 5 times
 
 warrant_price = price_warrants(current_stock_price, exercise_price, time_to_expiration, risk_free_rate, volatility, expected_dividends, share_dilution_factor, leverage_factor)
-print(f"The estimated price of the warrant is: {warrant_price}")
+print(f"The estimated price of the warrant is: {warrant_price}") 
 
-# Risk neutral probabilities binomial tree pricing model 
+# Risk neutral probabilities binomial tree pricing model
+
+import numpy as np
+
+def calculate_risk_neutral_probabilities(up_factor, down_factor, risk_free_rate, time_step):
+    """
+    Calculate risk-neutral probabilities for a binomial tree model.
+    
+    Parameters:
+    up_factor (float): The factor by which the price goes up in each step.
+    down_factor (float): The factor by which the price goes down in each step.
+    risk_free_rate (float): The annual risk-free interest rate.
+    time_step (float): The time step in years.
+
+    Returns:
+    float: The risk-neutral probability of an up move.
+    float: The risk-neutral probability of a down move.
+    """
+    # Calculate the risk-free growth factor
+    risk_free_growth = np.exp(risk_free_rate * time_step)
+    
+    # Calculate the risk-neutral probabilities
+    p_up = (risk_free_growth - down_factor) / (up_factor - down_factor)
+    p_down = 1 - p_up
+    
+    return p_up, p_down
+
+# Example usage:
+up_factor = 1.1  # The price goes up by 10%
+down_factor = 0.9  # The price goes down by 10%
+risk_free_rate = 0.05  # 5% annual risk-free interest rate
+time_step = 1/12  # Monthly time step
+
+p_up, p_down = calculate_risk_neutral_probabilities(up_factor, down_factor, risk_free_rate, time_step)
+print(f"Risk-neutral probability of an up move: {p_up}")
+print(f"Risk-neutral probability of a down move: {p_down}")
+
+# stochastic equation for a standard Brownian motion 
 
 
 
