@@ -280,5 +280,60 @@ for i in range(10):
 
 # ito lemma for function g(x,t)
 
+import numpy as np
+
+def ito_lemma(g, dg_dx, dg_dt, dg_d2x, x, t, mu, sigma, dt):
+    """
+    Apply Ito's Lemma to a function g(x, t).
+
+    Parameters:
+    g (function): The function g(x, t).
+    dg_dx (function): The partial derivative of g with respect to x.
+    dg_dt (function): The partial derivative of g with respect to t.
+    dg_d2x (function): The second partial derivative of g with respect to x.
+    x (float): The current value of the stochastic process.
+    t (float): The current time.
+    mu (float): The drift coefficient of the stochastic process.
+    sigma (float): The volatility coefficient of the stochastic process.
+    dt (float): The time increment.
+
+    Returns:
+    float: The change in g according to Ito's Lemma.
+    """
+    # Generate a random sample from the normal distribution for the Wiener process
+    dW = np.random.normal(0, np.sqrt(dt))
+    
+    # Calculate the change in g according to Ito's Lemma
+    dg = dg_dt(t, x) * dt + dg_dx(t, x) * (mu * dt + sigma * dW) + 0.5 * dg_d2x(t, x) * (sigma ** 2) * dt
+    
+    return dg
+
+# Example usage:
+# Define the function g(x, t) and its derivatives
+def g(x, t):
+    return x * np.exp(-t)
+
+def dg_dx(t, x):
+    return np.exp(-t)
+
+def dg_dt(t, x):
+    return -x * np.exp(-t)
+
+def dg_d2x(t, x):
+    return 0
+
+# Current value of the stochastic process, time, drift, volatility, and time increment
+x = 1.0
+t = 0.0
+mu = 0.1
+sigma = 0.2
+dt = 0.01
+
+# Apply Ito's Lemma
+change_in_g = ito_lemma(g, dg_dx, dg_dt, dg_d2x, x, t, mu, sigma, dt)
+print(f"The change in g according to Ito's Lemma is: {change_in_g}")
+
+# Ho-lee model for short rate
+
 
 
