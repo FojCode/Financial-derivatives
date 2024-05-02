@@ -611,4 +611,39 @@ for i in range(10):
 
 # black scholes partial differential equation 
 
+import numpy as np
+
+# Parameters
+S_max = 100.0  # Maximum stock price
+K = 50.0       # Strike price
+T = 1.0        # Time to maturity
+r = 0.05       # Risk-free rate
+sigma = 0.2    # Volatility
+M = 50         # Number of time steps
+N = 50         # Number of stock price steps
+dt = T / M     # Time step size
+dS = S_max / N # Stock price step size
+
+# Initialize the stock price and option value matrices
+S = np.linspace(0, S_max, N+1)
+V = np.zeros((M+1, N+1))
+
+# Boundary conditions for the call option
+V[:, N] = np.maximum(S - K, 0)  # At maturity
+V[M, :] = np.maximum(S - K, 0)  # At S_max
+
+# Finite difference method
+for i in range(M-1, -1, -1):
+    for j in range(1, N):
+        delta = (V[i+1, j+1] - V[i+1, j-1]) / (2*dS)
+        gamma = (V[i+1, j+1] - 2*V[i+1, j] + V[i+1, j-1]) / (dS**2)
+        theta = -0.5 * sigma**2 * S[j]**2 * gamma - r * S[j] * delta + r * V[i+1, j]
+        V[i, j] = V[i+1, j] + dt * theta
+
+# Extract the option value at S = S0
+S0 = 50  # Current stock price
+option_value = V[0, int(N/2)]
+print(f"The option value is: {option_value}")
+
+# garman kohlhagen prices of call and put options 
 
