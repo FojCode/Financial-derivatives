@@ -568,3 +568,47 @@ short_rate_path = cir_model(r0, k, theta, sigma, T, dt)
 print(short_rate_path[:10])
 
 # geometric Brownian motion model for a stock price
+
+import numpy as np
+
+# Function to simulate Geometric Brownian Motion
+def simulate_gbm(S0, mu, sigma, T, dt):
+    """
+    Simulate a Geometric Brownian Motion path.
+
+    Parameters:
+    S0 (float): Initial stock price.
+    mu (float): Expected return (drift coefficient).
+    sigma (float): Volatility (standard deviation of returns).
+    T (float): Total time horizon.
+    dt (float): Time step size.
+
+    Returns:
+    np.array: Simulated GBM path.
+    """
+    N = int(T / dt)  # Number of time steps
+    t = np.linspace(0, T, N)  # Time vector
+    W = np.random.standard_normal(size=N)  # Wiener increments
+    W = np.cumsum(W)*np.sqrt(dt)  # Cumulative sum for Wiener process
+    X = (mu - 0.5*sigma**2)*t + sigma*W
+    S = S0*np.exp(X)  # GBM formula
+
+    return S, t
+
+# Example parameters
+S0 = 100  # Initial stock price
+mu = 0.05  # Drift coefficient
+sigma = 0.2  # Volatility
+T = 1.0  # Time horizon (1 year)
+dt = 1/252  # Time step size (daily)
+
+# Simulate GBM
+stock_price, time_vector = simulate_gbm(S0, mu, sigma, T, dt)
+
+# Print the first 10 simulated prices
+for i in range(10):
+    print(f"Time {time_vector[i]:.2f}, Stock Price: {stock_price[i]:.2f}")
+
+# black scholes partial differential equation 
+
+
