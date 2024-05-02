@@ -105,5 +105,53 @@ print(f"The estimated price of the warrant is: {warrant_price}")
 
 # pricing warrants using binomial trees
 
+def price_warrants(spot_price, strike_price, time_to_expiration, risk_free_rate, volatility, dividends, dilution_factor, leverage):
+    """
+    Calculate the price of a warrant with time to expiration, dividends, dilution, and leverage.
+    
+    Parameters:
+    spot_price (float): The current price of the stock.
+    strike_price (float): The exercise price of the warrant.
+    time_to_expiration (float): The time to expiration in years.
+    risk_free_rate (float): The risk-free interest rate.
+    volatility (float): The volatility of the stock.
+    dividends (float): The expected dividends during the period until expiration.
+    dilution_factor (float): The factor to account for share dilution.
+    leverage (int): The leverage factor.
+
+    Returns:
+    float: The estimated price of the warrant.
+    """
+    # Black-Scholes Merton model adjusted for dividends and dilution
+    from scipy.stats import norm
+    import numpy as np
+
+    # Adjust spot price for dividends and dilution
+    adjusted_spot_price = spot_price - dividends - (spot_price * dilution_factor)
+
+    # Calculate d1 and d2
+    d1 = (np.log(adjusted_spot_price / strike_price) + (risk_free_rate + 0.5 * volatility ** 2) * time_to_expiration) / (volatility * np.sqrt(time_to_expiration))
+    d2 = d1 - volatility * np.sqrt(time_to_expiration)
+    
+    # Calculate the price of the warrant
+    warrant_price = (adjusted_spot_price * norm.cdf(d1) - strike_price * np.exp(-risk_free_rate * time_to_expiration) * norm.cdf(d2)) / leverage
+    
+    return warrant_price
+
+# Example usage:
+current_stock_price = 100.00  # Current stock price
+exercise_price = 120.00  # Exercise price of the warrant
+time_to_expiration = 1.0  # Time to expiration in years
+risk_free_rate = 0.05  # Risk-free interest rate (5% per annum)
+volatility = 0.25  # Volatility of the stock (25% per annum)
+expected_dividends = 2.00  # Expected dividends
+share_dilution_factor = 0.01  # Share dilution factor (1%)
+leverage_factor = 5  # Leverage of 5 times
+
+warrant_price = price_warrants(current_stock_price, exercise_price, time_to_expiration, risk_free_rate, volatility, expected_dividends, share_dilution_factor, leverage_factor)
+print(f"The estimated price of the warrant is: {warrant_price}")
+
+# Risk neutral probabilities binomial tree pricing model 
+
 
 
